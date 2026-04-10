@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/booking.dart';
 import '../../domain/usecases/get_bookings.dart';
 import '../../domain/usecases/create_booking.dart';
+import '../../../../core/error/failures.dart';
 import 'booking_state.dart';
 
 class BookingCubit extends Cubit<BookingState> {
@@ -21,7 +22,11 @@ class BookingCubit extends Cubit<BookingState> {
       currentBookings = await getBookingsUseCase(roomId);
       emit(BookingLoaded(currentBookings));
     } catch (e) {
-      emit(BookingError(e.toString()));
+      if (e is Failure) {
+        emit(BookingError(e.message));
+      } else {
+        emit(BookingError(e.toString()));
+      }
     }
   }
 
@@ -45,7 +50,11 @@ class BookingCubit extends Cubit<BookingState> {
       emit(BookingCreated());
       emit(BookingLoaded(List.from(currentBookings)));
     } catch (e) {
-      emit(BookingCreateError(e.toString()));
+      if (e is Failure) {
+        emit(BookingCreateError(e.message));
+      } else {
+        emit(BookingCreateError(e.toString()));
+      }
     }
   }
 

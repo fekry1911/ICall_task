@@ -37,6 +37,7 @@ class BookingRemoteDataSourceImpl implements BookingRemoteDataSource {
   @override
   Future<BookingModel> createBooking(BookingModel booking) async {
     try {
+      print(booking.toJson());
       final response = await apiClient.dio.post(
         AppConstants.getBookings,
         data: booking.toJson(),

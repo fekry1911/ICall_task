@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/error/failures.dart';
 import '../../domain/usecases/get_rooms.dart';
 import 'room_state.dart';
 
@@ -13,7 +14,11 @@ class RoomCubit extends Cubit<RoomState> {
       final rooms = await getRoomsUseCase();
       emit(RoomLoaded(rooms));
     } catch (e) {
-      emit(RoomError(e.toString()));
+      if (e is Failure) {
+        emit(RoomError(e.message));
+      } else {
+        emit(RoomError(e.toString()));
+      }
     }
   }
 }

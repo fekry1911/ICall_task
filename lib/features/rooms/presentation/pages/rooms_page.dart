@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/di/injection_container.dart';
 import '../cubit/room_cubit.dart';
 import '../cubit/room_state.dart';
@@ -16,7 +17,7 @@ class RoomsPage extends StatelessWidget {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          title: const Text('Spaces'),
+          title: const Text('Rooms'),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -40,15 +41,28 @@ class RoomsPage extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.meeting_room_outlined, size: 64.w, color: Colors.grey.shade400),
+                          Icon(
+                            Icons.meeting_room_outlined,
+                            size: 64.w,
+                            color: Colors.grey.shade400,
+                          ),
                           SizedBox(height: 16.h),
-                          Text('No rooms available.', style: TextStyle(color: Colors.grey.shade600, fontSize: 18.sp)),
+                          Text(
+                            'No rooms available.',
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 18.sp,
+                            ),
+                          ),
                         ],
                       ),
                     );
                   }
                   return ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 8.h,
+                    ),
                     itemCount: rooms.length,
                     itemBuilder: (context, index) {
                       return RoomCard(room: rooms[index], index: index);
@@ -59,9 +73,12 @@ class RoomsPage extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.all(24.w),
                       child: Text(
-                        state.message, 
+                        state.message.toString(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.redAccent, fontSize: 16.sp),
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                          fontSize: 16.sp,
+                        ),
                       ),
                     ),
                   );
