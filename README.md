@@ -67,4 +67,3 @@ The project relies on industry-standard packages to maintain high performance an
 ## ⏱ Approximate Time Spent
 
 **Approximate time spent to design, architect, develop, and polish:** ~3-4 Hours.
-*(Includes environment configuration, UI conceptualization, logical networking layer hookups, responsive implementations, and edge-case testing).*
