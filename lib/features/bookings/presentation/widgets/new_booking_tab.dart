@@ -135,7 +135,7 @@ class _NewBookingTabState extends State<NewBookingTab> {
                   width: double.infinity,
                   height: 56.h,
                   child: ElevatedButton(
-                    onPressed: (state is BookingCreating || !_isFormValid)
+                    onPressed: (state is BookingCreating || state is BookingRefreshing || !_isFormValid)
                       ? null
                       : () {
                           if (_formKey.currentState!.validate()) {
@@ -157,8 +157,18 @@ class _NewBookingTabState extends State<NewBookingTab> {
                             context.read<BookingCubit>().createBooking(newBooking);
                           }
                         },
-                    child: state is BookingCreating
-                      ? SizedBox(height: 24.w, width: 24.w, child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                    child: (state is BookingRefreshing || state is BookingCreating)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 22.w, width: 22.w, child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)),
+                            SizedBox(width: 12.w),
+                            Text(
+                              state is BookingRefreshing ? 'Checking availability...' : 'Confirming...',
+                              style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                            ),
+                          ],
+                        )
                       : Text('Confirm Reservation', style: TextStyle(fontSize: 18.sp)),
                   ),
                 ).animate().fadeIn(duration: 400.ms, delay: 300.ms).slideY(begin: 0.1);

@@ -33,12 +33,27 @@ class BookingCubit extends Cubit<BookingState> {
   Future<void> createBooking(Booking booking) async {
     final start = _parseDateTime(booking.date, booking.startTime);
     final end = _parseDateTime(booking.date, booking.endTime);
+
     if (!start.isBefore(end)) {
       emit(BookingCreateError('End time must be after start time'));
       return;
     }
+    emit(BookingRefreshing());
+    try {
+      currentBookings = await getBookingsUseCase(booking.roomId);
+    } catch (e) {
+      // If refresh fails, abort and notify the user
+      if (e is Failure) {
+        emit(BookingCreateError('Could not verify availability: ${e.message}'));
+      } else {
+        emit(BookingCreateError('Could not verify availability. Please try again.'));
+      }
+      return;
+    }
+
     if (_hasTimeOverlap(start, end)) {
-      emit(BookingCreateError('Time slot is already booked'));
+      emit(BookingLoaded(List.from(currentBookings)));
+      emit(BookingCreateError('This time slot was just booked by someone else. Please choose a different time.'));
       return;
     }
 
